@@ -60,3 +60,23 @@ call get_customers_by_city('   ');
 	END IF;
 */
 
+/* Proc to count number of rows using 
+Input and output */
+DELIMITER $$
+create procedure get_customer_count_by_city(IN p_city varchar(255), OUT p_total_customers INT)
+BEGIN
+	-- validate the input
+    IF TRIM(p_city) = "" OR p_city IS NULL THEN
+		SIGNAL sqlstate "45000" 
+        SET message_text ="city value cannot be blank or null";
+    END IF; 
+    -- SQL 
+	select COUNT(*) into p_total_customers
+    from customers
+    where city = p_city;
+END
+$$
+
+CALL get_customer_count_by_city('london', @total_customers);
+CALL get_customer_count_by_city('surrey', @total_customers); -- @ is for session variables 
+select @total_customers;
