@@ -108,3 +108,116 @@ where city not in ('mumbai');
 -- To view the result
 select * from customer_view
 
+-- create product table 
+create table product(id INT primary key, name varchar(255), price double, stock INT);
+create table transaction(id INT primary key, product_id INT, qty INT, sale_date Date);
+
+insert into product values (1,'Macbook Air', 40000, 2);
+insert into product values (2,'Macbook Pro', 111000, 1);
+
+/*
+create a trigger that gets executed BEFORE the insert on transaction
+and does following check
+1. if purchase quantity is more than available stock quantity , trigget must throw 45000 sql state error with message
+'Requested quantity not available'
+*/
+insert into transaction values (1, 1, 3, now()); -- this query is going to call the trigger
+
+DELIMITER $$
+
+create trigger trg_product_stock_check
+BEFORE INSERT on transaction
+FOR EACH ROW
+BEGIN
+    -- declare a variable to hold stock of product
+    DECLARE v_stock INT;
+
+    select stock into v_stock
+    from product
+    where id=NEW.product_id ;  -- the product_id that the user wants to add to transaction
+
+    -- check if stock is less than qty
+    IF v_stock < NEW.qty THEN
+        SIGNAL sqlstate "45000"
+        SET message_text="Requested quantity not available";
+    END if;
+END
+$$
+
+/*
+create trigger to update stock quantity in ptoduct table
+AFTER the insert has happend
+
+insert into transaction values (1, 1, 3, now()); -- this query is going to call the trigger
+insert into transaction values (1, 1, 1, now());
+*/
+
+DELIMITER $$
+
+create trigger trg_update_product_stock
+AFTER INSERT on transaction
+FOR EACH ROW
+BEGIN
+    -- update the stock quantity
+    update product
+    set stock = stock - NEW.qty
+    where id = NEW.product_id;
+
+END
+$$
+
+
+/*
+Cursors: they are used to fetch records from the DB 
+Cursor STEPS : 
+1. Declare the cursor 
+   - declare the variables to hold the record values  
+	1.5.  Declare cursor continue handler   
+2. OPEN it 
+3. Fetch the records
+	3.1. Start the labelled loop 
+    3.2. FETCH into variables 
+    3.3. Wrtie termination IF using cursor handler 
+    3.4. Perform ops with variables 
+    3.5. Close the loop 
+4. CLOSE it  
+*/
+
+-- Create a Cursor to fetch all products  
+DELIMITER $$
+create procedure fetch_all_products()
+BEGIN
+    -- Delcare variables 
+    declare v_id INT ;
+    declare v_price double ;
+    declare complete boolean DEFAULT false; 
+    
+	-- Declare the cursor
+    declare all_products_cursor cursor FOR   -- for this query i use this cursor 
+    select p.id,p.price  
+	from product p ; 
+    
+    -- decalre termination condition 
+    declare continue handler FOR NOT FOUND SET complete = true ; -- cursor will now manage this complete 
+    
+    OPEN all_products_cursor; 
+    
+    -- loop thru the cursor 
+    loop_lbl: 
+    LOOP    -- this starts the loop and stays in it until we leave the loop 
+		FETCH all_products_cursor into v_id,v_price ;
+		
+		if complete = true THEN 
+			leave loop_lbl;   -- leave the loop when complete is done 
+		END if ; 
+		-- Note: complete is managed by cursor itself as it is defined as a handler 
+    
+    -- perform ops on these row values 
+    select v_id, v_price; 
+    
+    END LOOP;
+    CLOSE all_products_cursor; 
+END; 
+$$
+
+call fetch_all_products(); 
