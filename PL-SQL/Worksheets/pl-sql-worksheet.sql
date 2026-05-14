@@ -80,3 +80,20 @@ $$
 CALL get_customer_count_by_city('london', @total_customers);
 CALL get_customer_count_by_city('surrey', @total_customers); -- @ is for session variables 
 select @total_customers;
+
+-- DAY 2 PLSQL 
+/*
+Create a Proc for updating city(IN city, OUT city) and give back the updated city using INOUT param
+*/
+DELIMITER $$
+create procedure city_updation(IN p_id int, INOUT p_city varchar(255))
+BEGIN
+     update customers 
+     SET city = p_city
+     where id = p_id;
+END
+$$
+SET @city_val = "mumbai";
+CALL city_updation(3, @city_val);
+select @city_val;
+
