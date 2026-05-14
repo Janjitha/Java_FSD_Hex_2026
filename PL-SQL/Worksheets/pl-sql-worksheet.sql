@@ -97,3 +97,14 @@ SET @city_val = "mumbai";
 CALL city_updation(3, @city_val);
 select @city_val;
 
+/*
+Create a View to hide age info of customers and also hide all records that have city as mumbai
+*/
+create VIEW customer_view AS 
+select id, name, city
+from Customers 
+where city not in ('mumbai');
+
+-- To view the result
+select * from customer_view
+
