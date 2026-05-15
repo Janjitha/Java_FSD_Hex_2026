@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.enums.Role;
 import com.exception.UserNotFoundException;
 import com.model.User;
 import com.service.UserService;
@@ -21,6 +22,29 @@ public class MainController {
             User user = userService.authenticateUser(username, password);
             System.out.println("Welcome " + user.getUsername() );
             System.out.println("Role is " + user.getRole());
+            if(user.getRole().equals(Role.OFFICER)){
+                while(true){
+                    System.out.println("1. View Incidents"); //incidents for this logged-in user
+                    System.out.println("2. Filter Incidents by Status ");
+                    System.out.println("0. Exit");
+                    int op = sc.nextInt();
+                    if(op == 0) break; //exits the while loop
+                    switch(op){
+                        case 1:
+                            // implement view incidents op here. (controller - service - repo )
+                            break;
+                        case 2:
+                            System.out.println("Enter the status");
+                            String statusVal = sc.next();
+                            // implement filter incidents by status here
+                            break;
+                    }
+                }
+            }
+            else
+            if(user.getRole().equals(Role.STATION_HEAD) ){
+
+            }
         } catch (SQLException | UserNotFoundException e) {
             System.out.println(e.getMessage());
         }
