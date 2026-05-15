@@ -12,7 +12,16 @@ public class Incident {
     private Officer officer; //Officer injected in Incident
     // private int officer_id; //<-- wrong..
 
+    public Incident() {
+    }
 
+    public Incident(int id, IncidentType incidentType, String progressDetails, IncidentStatus incidentStatus ) {
+        this.id = id;
+        this.incidentType = incidentType;
+        this.progressDetails = progressDetails;
+        this.incidentStatus = incidentStatus;
+
+    }
     public int getId() {
         return id;
     }

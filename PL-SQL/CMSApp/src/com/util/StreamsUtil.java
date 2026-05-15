@@ -1,0 +1,22 @@
+package com.util;
+
+import com.enums.IncidentType;
+import com.model.Incident;
+import com.service.StreamsService;
+
+import java.util.List;
+
+public class StreamsUtil {
+    public static void main(String[] args) {
+        StreamsService streamsService = new StreamsService();
+        List<Incident> list =  streamsService.sampleData();
+
+        List<Incident> filteredListByType =  streamsService.filterByIncidentTypeV2(list,IncidentType.ABUSE);
+        filteredListByType.forEach(System.out::println);
+
+        System.out.println("Display all Incident Types ");
+        List<IncidentType> types =  streamsService.getAllIncidentTypes(list);
+        types.forEach(System.out::println);
+    }
+
+}
