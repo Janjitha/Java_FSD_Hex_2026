@@ -17,4 +17,8 @@ public class CustomerService {
     public List<Customer> getCustomersByCity(String city) throws SQLException {
         return customerRepository.getCustomersByCity(city);
     }
+
+    public List<Customer> getAllCustomerView() {
+        return customerRepository.getAllCustomerView();
+    }
 }

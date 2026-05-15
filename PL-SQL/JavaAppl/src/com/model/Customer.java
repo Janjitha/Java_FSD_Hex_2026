@@ -16,6 +16,12 @@ public class Customer {
         this.age = age;
     }
 
+    public Customer(int id, String name, String city) {
+        this.id = id;
+        this.name = name;
+        this.city = city;
+    }
+
     public int getId() {
         return id;
     }
@@ -54,7 +60,7 @@ public class Customer {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", city='" + city + '\'' +
-                ", age=" + age +
+//                ", age=" + age +
                 '}';
     }
 }
