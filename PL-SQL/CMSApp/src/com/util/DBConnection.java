@@ -7,7 +7,7 @@ import java.sql.SQLException;
 public class DBConnection {
     private String url="jdbc:mysql://localhost:3306/crime_db";
     private String userDb = "root";
-    private String passDB = "deepcoder";
+    private String passDB = "root";
     private String driver = "com.mysql.cj.jdbc.Driver";
     private Connection connection;
 
