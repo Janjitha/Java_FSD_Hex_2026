@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class TicketMapper {
+public class IncidentMapper {
 
     public Incident mapDtoToEntity(IncidentDto dto){
         Incident incident = new Incident();
