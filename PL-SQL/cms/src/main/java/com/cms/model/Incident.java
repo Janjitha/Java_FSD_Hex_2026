@@ -33,4 +33,7 @@ public class Incident {
     @UpdateTimestamp
     private Instant updatedAt;
 
+    @ManyToOne
+    private Officer officer;
+
 }
