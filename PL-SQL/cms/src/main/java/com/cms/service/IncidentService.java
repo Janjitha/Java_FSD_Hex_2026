@@ -2,6 +2,7 @@ package com.cms.service;
 
 import com.cms.dto.IncidentDto;
 import com.cms.dto.IncidentRespDto;
+import com.cms.enums.IncidentType;
 import com.cms.exception.ResourceNotFoundException;
 import com.cms.mapper.IncidentMapper;
 import com.cms.model.Incident;
@@ -25,7 +26,8 @@ for all other classes including util use @Component
 public class IncidentService {
 
     private final IncidentRepository incidentRepository;
-    private final IncidentMapper ticketMapper;
+//    private final IncidentMapper ticketMapper;
+    private final IncidentMapper incidentMapper;
 
     public List<Incident> getAll() {
         return incidentRepository.findAll();
@@ -33,7 +35,8 @@ public class IncidentService {
 
     public void addIncident(IncidentDto dto) {
         // Map the dto to Entity
-        Incident incident = ticketMapper.mapDtoToEntity(dto);
+//        Incident incident = ticketMapper.mapDtoToEntity(dto);
+        Incident incident = incidentMapper.mapDtoToEntity(dto);
         // Save the Entity
         incidentRepository.save(incident);
     }
@@ -61,7 +64,10 @@ public class IncidentService {
         // prepare the Pageable object using PageRequest.
         Pageable pageable =  PageRequest.of(page,size);
         Page<Incident> pages =  incidentRepository.findAll(pageable);
-        return ticketMapper.mapEntityTODto(pages);
+        return incidentMapper.mapEntityTODto(pages);
+    }
+    public List<Incident> getByIncidentType(IncidentType incidentType) {
+        return incidentRepository.findByIncidentType(incidentType);
     }
 }
 /*

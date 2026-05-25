@@ -2,6 +2,7 @@ package com.cms.controller;
 
 import com.cms.dto.IncidentDto;
 import com.cms.dto.IncidentRespDto;
+import com.cms.enums.IncidentType;
 import com.cms.exception.ResourceNotFoundException;
 import com.cms.model.Incident;
 import com.cms.service.IncidentService;
@@ -110,6 +111,10 @@ public class IncidentController {
     public void update(@PathVariable int id,
                        @RequestBody Incident updatedIncident){
         incidentService.update(id, updatedIncident);
+    }
+    @GetMapping("/api/incident/type")
+    public List<Incident> getByIncidentType(@RequestParam IncidentType incidentType){
+        return incidentService.getByIncidentType(incidentType);
     }
 }
 
