@@ -1,6 +1,7 @@
 package com.cms.controller;
 
 import com.cms.dto.IncidentDto;
+import com.cms.dto.IncidentRespDto;
 import com.cms.exception.ResourceNotFoundException;
 import com.cms.model.Incident;
 import com.cms.service.IncidentService;
@@ -27,8 +28,17 @@ public class IncidentController {
     private final IncidentService incidentService;
 
     @GetMapping("/api/incident/all")
-    public List<Incident> getAll(){
-        return incidentService.getAll();
+//    public List<Incident> getAll(){
+//        return incidentService.getAll();
+//}
+    public List<Incident> getAll( ){
+        return incidentService.getAll( );
+    }
+
+    @GetMapping("/api/incident/all/v2")
+    public IncidentRespDto getAllV2(@RequestParam int page,
+                                    @RequestParam int size){
+        return incidentService.getAllWithPagination( page,size);
     }
 
     @PostMapping("/api/incident/add")

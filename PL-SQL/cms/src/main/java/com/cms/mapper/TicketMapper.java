@@ -1,8 +1,12 @@
 package com.cms.mapper;
 
 import com.cms.dto.IncidentDto;
+import com.cms.dto.IncidentRespDto;
 import com.cms.model.Incident;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class TicketMapper {
@@ -13,5 +17,17 @@ public class TicketMapper {
         incident.setIncidentStatus(dto.incidentStatus());
         incident.setProgressDetails(dto.progressDetails());
         return incident;
+    }
+
+    public IncidentRespDto mapEntityTODto(Page<Incident> pages){
+        long totalElements =  pages.getTotalElements();
+        int totalPages = pages.getTotalPages();
+        List<Incident> list = pages.getContent();
+        IncidentRespDto dto = new IncidentRespDto(
+                totalElements,
+                totalPages,
+                list
+        );
+        return dto;
     }
 }

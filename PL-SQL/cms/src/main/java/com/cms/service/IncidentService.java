@@ -1,11 +1,15 @@
 package com.cms.service;
 
 import com.cms.dto.IncidentDto;
+import com.cms.dto.IncidentRespDto;
 import com.cms.exception.ResourceNotFoundException;
 import com.cms.mapper.TicketMapper;
 import com.cms.model.Incident;
 import com.cms.repository.IncidentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +31,6 @@ public class IncidentService {
         return incidentRepository.findAll();
     }
 
-//    public void addIncident(Incident incident) {
     public void addIncident(IncidentDto dto) {
         // Map the dto to Entity
         Incident incident = ticketMapper.mapDtoToEntity(dto);
@@ -53,8 +56,15 @@ public class IncidentService {
         exisitngIncident.setProgressDetails(updatedIncident.getProgressDetails());
         incidentRepository.save(exisitngIncident);
     }
+
+    public IncidentRespDto getAllWithPagination(int page, int size) {
+        // prepare the Pageable object using PageRequest.
+        Pageable pageable =  PageRequest.of(page,size);
+        Page<Incident> pages =  incidentRepository.findAll(pageable);
+        return ticketMapper.mapEntityTODto(pages);
+    }
 }
 /*
 Optional<T> is a wrapper
 which says,i may or may not give u T
- */
+*/
