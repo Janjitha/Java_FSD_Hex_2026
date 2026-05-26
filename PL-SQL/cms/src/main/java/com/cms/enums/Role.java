@@ -1,5 +1,6 @@
 package com.cms.enums;
 
 public enum Role {
-    OFFICER
+    OFFICER,
+    STATION_HEAD
 }
