@@ -14,7 +14,7 @@ import java.time.Instant;
 @Entity
 @Getter
 @Setter
-public class Incident {
+public class Incident { //i
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // findById(id)

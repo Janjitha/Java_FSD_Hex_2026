@@ -97,6 +97,15 @@ public class IncidentService {
                 .map(incidentMapper :: getDtoForEntity)
                 .toList(); //each incident will be converted into IncidentOfficerDto
     }
+    public List<IncidentOfficerDto> getIncidentByOfficerUsername(String officerUsername) {
+        Officer officer = officerService.getByUsername(officerUsername);
+        // List<Incident>  list = incidentRepository.findByOfficerUserUsername(officerUsername);
+        List<Incident>  list = incidentRepository.getByOfficerUserUsernameJpql(officerUsername);
+        return list.
+                stream()
+                .map(incidentMapper :: getDtoForEntity)
+                .toList(); //each incident will be converted into IncidentOfficerDto
+    }
 }
 /*
 Optional<T> is a wrapper

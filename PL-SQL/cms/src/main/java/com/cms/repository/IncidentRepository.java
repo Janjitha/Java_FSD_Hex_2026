@@ -3,6 +3,7 @@ package com.cms.repository;
 import com.cms.enums.IncidentType;
 import com.cms.model.Incident;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -19,5 +20,14 @@ public interface IncidentRepository extends JpaRepository<Incident, Integer> {
     /* findBy : select * from Incident where incidentType=?1 */
 
     List<Incident> findByOfficerId(int id);
+
+    List<Incident> findByOfficerUserUsername(String officerUsername);
+
+    @Query("""
+            select i
+            from Incident i
+            where i.officer.user.username=?1
+            """)
+    List<Incident> getByOfficerUserUsernameJpql(String officerUsername);
     /* findBy : select * from Incident where officer.id=?1 */
 }

@@ -136,5 +136,9 @@ public List<Incident> getAll( ){
     public List<IncidentOfficerDto> getIncidentByOfficerId(@PathVariable int officerId){
         return incidentService.getIncidentByOfficerId(officerId);
     }
+    @GetMapping("/get/officer")
+    public List<IncidentOfficerDto> getIncidentByOfficerUsername(@RequestParam String officerUsername){
+        return incidentService.getIncidentByOfficerUsername(officerUsername);
+    }
 }
 

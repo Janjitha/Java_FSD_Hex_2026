@@ -16,4 +16,7 @@ public class OfficerService {
         return officerRepository.findById(officerId)
                 .orElseThrow(()-> new ResourceNotFoundException("Invalid Officer ID"));
     }
+    public Officer getByUsername(String officerUsername) {
+        return officerRepository.findByUserUsername(officerUsername);
+    }
 }
