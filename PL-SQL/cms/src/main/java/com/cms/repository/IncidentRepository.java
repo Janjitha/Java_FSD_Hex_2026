@@ -16,5 +16,8 @@ public interface IncidentRepository extends JpaRepository<Incident, Integer> {
     * */
 
     List<Incident> findByIncidentType(IncidentType type);
-    /* findBy : select * from Incident where incidentType=? */
+    /* findBy : select * from Incident where incidentType=?1 */
+
+    List<Incident> findByOfficerId(int id);
+    /* findBy : select * from Incident where officer.id=?1 */
 }

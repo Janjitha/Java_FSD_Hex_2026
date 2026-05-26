@@ -2,6 +2,7 @@ package com.cms.model;
 
 import com.cms.enums.IncidentStatus;
 import com.cms.enums.IncidentType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,7 +34,10 @@ public class Incident {
     @UpdateTimestamp
     private Instant updatedAt;
 
-    @ManyToOne
-    private Officer officer;
+//    @ManyToOne
+//    private Officer officer;
+    @ManyToOne(fetch = FetchType.LAZY) // eager loading -- fetch type
+    @JsonIgnore
+    private Officer officer; //findByOfficerId(id) -- List<Incident>
 
 }

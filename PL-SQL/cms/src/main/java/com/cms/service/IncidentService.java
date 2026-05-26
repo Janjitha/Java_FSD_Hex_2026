@@ -1,6 +1,7 @@
 package com.cms.service;
 
 import com.cms.dto.IncidentDto;
+import com.cms.dto.IncidentOfficerDto;
 import com.cms.dto.IncidentRespDto;
 import com.cms.enums.IncidentType;
 import com.cms.exception.ResourceNotFoundException;
@@ -82,6 +83,19 @@ public class IncidentService {
         incident.setOfficer(officer);
         // Save the Entity
         incidentRepository.save(incident);
+    }
+    public List<IncidentOfficerDto> getIncidentByOfficerId(int officerId) {
+        // 1. write sql/jpql for this op
+        // 2. write a derived query for this op
+        Officer officer = officerService.getById(officerId);
+
+        List<Incident>  list =  incidentRepository.findByOfficerId(officerId);
+        //convert list<Incident> into List<IncidentOfficerDto>
+
+        return list.
+                stream()
+                .map(incidentMapper :: getDtoForEntity)
+                .toList(); //each incident will be converted into IncidentOfficerDto
     }
 }
 /*

@@ -1,6 +1,7 @@
 package com.cms.controller;
 
 import com.cms.dto.IncidentDto;
+import com.cms.dto.IncidentOfficerDto;
 import com.cms.dto.IncidentRespDto;
 import com.cms.enums.IncidentType;
 import com.cms.exception.ResourceNotFoundException;
@@ -24,25 +25,29 @@ import java.util.List;
  * */
 @RestController
 @AllArgsConstructor
+@RequestMapping("/api/incident")
 public class IncidentController {
 
     private final IncidentService incidentService;
 
-    @GetMapping("/api/incident/all")
+//    @GetMapping("/api/incident/all")
 //    public List<Incident> getAll(){
 //        return incidentService.getAll();
 //}
-    public List<Incident> getAll( ){
-        return incidentService.getAll( );
-    }
+@GetMapping("/all")
+public List<Incident> getAll( ){
+    return incidentService.getAll( );
+}
 
-    @GetMapping("/api/incident/all/v2")
+//    @GetMapping("/api/incident/all/v2")
+@GetMapping("/all/v2")
     public IncidentRespDto getAllV2(@RequestParam int page,
                                     @RequestParam int size){
         return incidentService.getAllWithPagination( page,size);
     }
 
-    @PostMapping("/api/incident/add")
+//    @PostMapping("/api/incident/add")
+    @PostMapping("/add")
     public void addIncident(@Valid @RequestBody IncidentDto dto){
         incidentService.addIncident(dto);
     }
@@ -65,13 +70,15 @@ public class IncidentController {
 //        }
 //    }
 
-    @PostMapping("/api/incident/add/v2/{officerId}")
+//    @PostMapping("/api/incident/add/v2/{officerId}")
+    @PostMapping("/add/v2/{officerId}")
     public void addIncidentWithOfficer(@Valid @RequestBody IncidentDto dto,
                                        @PathVariable int officerId){
         incidentService.addIncidentWithOfficer(dto,officerId);
     }
 
-    @GetMapping("/api/incident/get-one/{id}")
+//    @GetMapping("/api/incident/get-one/{id}")
+    @GetMapping("/get-one/{id}")
     public ResponseEntity<Incident> getById(@PathVariable int id){ //<-- path variable
         return ResponseEntity
                 .ok(incidentService.getById(id));
@@ -90,7 +97,8 @@ public class IncidentController {
 //        }
 //    }
 
-    @DeleteMapping("/api/incident/delete/{id}")
+//    @DeleteMapping("/api/incident/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteById(@PathVariable int id){
         incidentService.deleteById(id);
     }
@@ -113,14 +121,20 @@ public class IncidentController {
 //        }
 //    }
 
-    @PutMapping("/api/incident/update/{id}")
+//    @PutMapping("/api/incident/update/{id}")
+    @PutMapping("/update/{id}")
     public void update(@PathVariable int id,
                        @RequestBody Incident updatedIncident){
         incidentService.update(id, updatedIncident);
     }
-    @GetMapping("/api/incident/type")
+//    @GetMapping("/api/incident/type")
+    @GetMapping("/type")
     public List<Incident> getByIncidentType(@RequestParam IncidentType incidentType){
         return incidentService.getByIncidentType(incidentType);
+    }
+    @GetMapping("/get/officer/{officerId}")
+    public List<IncidentOfficerDto> getIncidentByOfficerId(@PathVariable int officerId){
+        return incidentService.getIncidentByOfficerId(officerId);
     }
 }
 
