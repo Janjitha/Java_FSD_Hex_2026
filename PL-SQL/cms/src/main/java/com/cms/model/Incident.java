@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Getter
@@ -39,5 +40,11 @@ public class Incident { //i
     @ManyToOne(fetch = FetchType.LAZY) // eager loading -- fetch type
     @JsonIgnore
     private Officer officer; //findByOfficerId(id) -- List<Incident>
+
+        /*
+    @ManyToMany
+    @JoinTable(name = "incident_suspect")
+    private List<Suspect> suspects;
+    */
 
 }
