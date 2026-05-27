@@ -11,13 +11,13 @@ import java.time.Instant;
 @Table(name = "incident_suspect")
 @Setter
 @Getter
-public class IncidentSuspect {
+public class IncidentSuspect { //is
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @ManyToOne
-    private Incident incident;
+    private Incident incident; //List<IncidentSuspect> list =  findByIncidentId(incident id)
 
     @ManyToOne
     private Suspect suspect;
