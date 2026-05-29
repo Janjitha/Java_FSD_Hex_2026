@@ -19,4 +19,7 @@ import org.springframework.stereotype.Service;
                     .orElseThrow(()-> new UsernameNotFoundException("Invalid Credentials"));
             return user;
         }
+    public User save(User user) {
+        return userRepository.save(user);
+    }
     }
