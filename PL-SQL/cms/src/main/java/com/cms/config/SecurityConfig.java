@@ -2,6 +2,7 @@ package com.cms.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -38,7 +39,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) /// Spring needs this for POST,PUT & DELETE
                 //.csrf(ref->ref.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers(HttpMethod.GET, "/api/station/by-incident/{incidentId}").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/api/incident/suspect/by-incident/{incidentId}").authenticated()
+                                .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasRole("OFFICER")
+                                .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyRole("OFFICER", "STATION_HEAD")
+                                .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasRole("OFFICER")
+                                .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasRole("STATION_HEAD")
                                 .anyRequest().authenticated()
+                        //.anyRequest().denyAll()
                         // .anyRequest().permitAll() -- all API work without Auth
                 );
         http.httpBasic(Customizer.withDefaults()); //i am telling Spring that i am using Basic Auth technique
