@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +26,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final UserService userService;
+    private final JwtFilter jwtFilter;
 
 //    @Bean
 //    public UserDetailsService users() {
@@ -52,14 +54,20 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.GET, "/api/auth/login").authenticated()
                                 .requestMatchers(HttpMethod.GET, "/api/station/by-incident/{incidentId}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/incident/suspect/by-incident/{incidentId}").authenticated()
-                                .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasRole("OFFICER")
-                                .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyRole("OFFICER", "STATION_HEAD")
-                                .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasRole("OFFICER")
-                                .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasRole("STATION_HEAD")
+//                                .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasRole("OFFICER")
+//                                .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyRole("OFFICER", "STATION_HEAD")
+//                                .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasRole("OFFICER")
+//                                .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasRole("STATION_HEAD")
+                                .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasAuthority("OFFICER")
+                                .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyAuthority("OFFICER", "STATION_HEAD")
+                                .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasAuthority("OFFICER")
+                                .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasAuthority("STATION_HEAD")
                                 .anyRequest().authenticated()
+
                         //.anyRequest().denyAll()
                         // .anyRequest().permitAll() -- all API work without Auth
                 );
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.httpBasic(Customizer.withDefaults()); //i am telling Spring that i am using Basic Auth technique
         return http.build();
     }
