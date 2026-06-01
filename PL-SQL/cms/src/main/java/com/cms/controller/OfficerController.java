@@ -6,7 +6,10 @@ import com.cms.dto.OfficerResponseDto;
 import com.cms.service.OfficerService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -39,5 +42,14 @@ List of Officers:
     @GetMapping("/by-incident/stat")
     public OfficerIncidentStatRespDto incidentByOfficerStat(){
         return officerService.incidentByOfficerStat();
+    }
+
+    @PostMapping("/id/upload")
+    public void upload(Principal principal,
+                       @RequestParam("file") MultipartFile file) throws IOException {
+        //file is the actual doc/image user is uploading.
+
+        String username = principal.getName();
+        officerService.upload(username, file);
     }
 }

@@ -19,5 +19,6 @@ public class Officer { //o
 
     @ManyToOne
     private Station station;
+    private String idPath;
 
 }
