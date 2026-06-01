@@ -1,8 +1,9 @@
 package com.cms.service;
 
-import com.cms.dto.IncidentDto;
-import com.cms.dto.IncidentOfficerDto;
-import com.cms.dto.IncidentRespDto;
+//import com.cms.dto.IncidentDto;
+//import com.cms.dto.IncidentOfficerDto;
+//import com.cms.dto.IncidentRespDto;
+import com.cms.dto.*;
 import com.cms.enums.IncidentType;
 import com.cms.exception.ResourceNotFoundException;
 import com.cms.mapper.IncidentMapper;
@@ -105,6 +106,26 @@ public class IncidentService {
                 stream()
                 .map(incidentMapper :: getDtoForEntity)
                 .toList(); //each incident will be converted into IncidentOfficerDto
+    }
+    public OfficerIncidentStatRespDto getIncidentStatByType() {
+        List<IncidentTypeStatDto> list = incidentRepository.getIncidentStatByType();
+
+        //convert from List<IncidentTypeStatDto> to OfficerIncidentStatRespDto
+        List<String> typeList =  list.stream()
+                .map(IncidentTypeStatDto :: type)
+                .map(Enum::toString)
+                .toList();
+
+        List<Long> listNumber = list.stream()
+                .map(IncidentTypeStatDto :: numberOfIncidents)
+                .toList();
+
+        return new OfficerIncidentStatRespDto(
+                "IncidentType Stats",
+                typeList,
+                listNumber
+        );
+
     }
 }
 /*
