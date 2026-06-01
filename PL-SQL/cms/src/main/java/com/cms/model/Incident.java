@@ -38,7 +38,7 @@ public class Incident { //i
 //    @ManyToOne
 //    private Officer officer;
     @ManyToOne(fetch = FetchType.LAZY) // eager loading -- fetch type
-    @JsonIgnore
+//    @JsonIgnore
     private Officer officer; //findByOfficerId(id) -- List<Incident>
 
         /*

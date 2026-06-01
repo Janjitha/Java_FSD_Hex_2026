@@ -1,5 +1,7 @@
 package com.cms.service;
 
+import com.cms.dto.IncidentOfficerStatJpqlDto;
+import com.cms.dto.OfficerIncidentStatRespDto;
 import com.cms.dto.OfficerReqDto;
 import com.cms.dto.OfficerResponseDto;
 import com.cms.enums.Role;
@@ -68,5 +70,25 @@ public class OfficerService {
         // Step 5: Save officer having user, in DB
         officerRepository.save(officer);
 
+    }
+
+    public OfficerIncidentStatRespDto incidentByOfficerStat() {
+        List<IncidentOfficerStatJpqlDto> list =  officerRepository.incidentByOfficerStat();
+
+        //  Convert List<IncidentOfficerStatJpqlDto> to OfficerIncidentStatRespDto
+
+        List<String> names =  list.stream()
+                .map(IncidentOfficerStatJpqlDto::name)
+                .toList();
+
+        List<Long> numberList =  list.stream()
+                .map(IncidentOfficerStatJpqlDto :: numberOfIncidents)
+                .toList();
+
+        return new OfficerIncidentStatRespDto(
+                "Incidents per Officer Stat",
+                names,
+                numberList
+        );
     }
 }
