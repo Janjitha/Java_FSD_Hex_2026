@@ -13,6 +13,7 @@ function App(){  // This is a react component
 //  -------------------------------------------------------------------------------
 import ArithmeticComponent from "./components/ArithmeticComponent";
 import Products from "./components/Products";
+import CreateProduct from "./components/createProduct";
 function App(){ // This is the Parent component in react 
 
   return(  // This return fn has to be there in every react component. It returns JSX
@@ -21,7 +22,8 @@ function App(){ // This is the Parent component in react
     // </div>
     <div>
        {/*<ArithmeticComponent /> */} 
-       <Products />
+       {/*  <Products /> */}
+       <CreateProduct />
     </div>
   )
 }
