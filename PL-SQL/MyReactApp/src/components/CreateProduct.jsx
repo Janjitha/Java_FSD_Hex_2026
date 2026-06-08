@@ -6,6 +6,12 @@ const CreateProduct = ()=>{
     const [price,setPrice] = useState() 
     const [category,setCategory] = useState() 
     const [sCount,setSCount] = useState() 
+    const [isDisable, setIsDisable] = useState(true)
+
+    const [errmsgName, seterrmsgName] = useState('Name is Mandatory');
+    const [errmsgPrice, seterrmsgPrice] = useState('Price is Mandatory');
+    const [errmsgCategory, seterrmsgCategory] = useState('Category is Mandatory');
+    const [errmsgsCount, seterrmsgsCount] = useState('Stock count is Mandatory');
 
     const addProduct = (e)=>{
         e.preventDefault() 
@@ -29,19 +35,30 @@ const CreateProduct = ()=>{
                         </div>
                         <div className="card-body">
                              <div className="mb-4">
-                                <label>Product Name: </label>
+                                <label>Product Name: </label> <span className="badge text-bg-danger">{errmsgName}</span>
                                 <input type="text" className="form-control" 
-                                onChange={(e)=> setName(e.target.value)}
+                                onChange={(e)=> {
+                                    e.target.value !== "" ? seterrmsgName(""): seterrmsgName("Name is Mandatory")
+                                    setName(e.target.value)
+                                    
+                                }}
                                 />
                              </div>
                              <div className="mb-4">
-                                <label>Product Price: </label>
+                                <label>Product Price: </label> <span className="badge text-bg-danger">{errmsgPrice}</span>
                                 <input type="number" className="form-control" 
-                                onChange={(e)=> setPrice(e.target.value)}/>
+                                onChange={(e)=>{
+                                    e.target.value !== "" ? seterrmsgPrice(""): seterrmsgPrice("Price is Mandatory")
+                                    setPrice(e.target.value)
+
+                                } }/>
                              </div>
                              <div className="mb-4">
-                                <label>Category Name: </label>
-                                <select className="form-control" onChange={(e)=> setCategory(e.target.value)}>
+                                <label>Category Name: </label> <span className="badge text-bg-danger">{errmsgPrice}</span>
+                                <select className="form-control" onChange={(e)=> {
+                                    e.target.value !== "" ? seterrmsgCategory(""): seterrmsgCategory("Please select category")
+                                    setCategory(e.target.value)
+                                }}>
                                     <option value="">---select category----</option>
                                     <option value="mobile">Mobiles</option>
                                     <option value="laptop">Laptop</option>
@@ -49,13 +66,19 @@ const CreateProduct = ()=>{
                                 </select>
                              </div>
                              <div className="mb-4">
-                                <label>Stock Count: </label>
+                                 <label>Stock Count: </label><span className="badge text-bg-danger">{errmsgsCount}</span>
                                 <input type="number" className="form-control" 
-                                onChange={(e)=> setSCount(e.target.value)}/>
+                                onChange={(e)=> {
+                                    e.target.value !== "" ? seterrmsgsCount(""): seterrmsgsCount("Stock count please")
+                                    setSCount(e.target.value)
+                                }}/>
                              </div>
                         </div>
                         <div className="card-footer">
-                            <input type="submit" value="Add Product" className="btn btn-secondary"/>
+                            <input type="submit" value="Add Product" className="btn btn-secondary" 
+                            disabled={((name === undefined) || (name === "") )? true : false}
+                             
+                            />
                          </div>
 
                     </div>
