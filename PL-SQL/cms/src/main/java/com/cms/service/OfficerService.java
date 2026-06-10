@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -34,7 +35,7 @@ public class OfficerService {
     private final OfficerRepository officerRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
-    private static final String UPLOAD_LOC = "C:/Users/HP/Documents/java-fsd-hex-may-2026/uploads";
+//    private static final String UPLOAD_LOC = "C:/Users/HP/Documents/java-fsd-hex-may-2026/uploads";
 
     public Officer getById(int officerId) {
         return officerRepository.findById(officerId)
@@ -113,18 +114,19 @@ public class OfficerService {
         FileUtility.validateFile(file);
 
         // Original filename
-        String fileName = file.getOriginalFilename();
+//        String fileName = file.getOriginalFilename();
 
         // i am creating the path where i will upload the file: destination
-        Path uploadPath =  Paths.get(UPLOAD_LOC);
+        String uploadLoc = "C:/Users/HP/Documents/java-fsd-hex-may-2026/uploads";
+        Path uploadPath =  Paths.get(uploadLoc).normalize();
         // Attach the file name to the upload path
-        Path destinationPath =  uploadPath.resolve(fileName);
+        Path destinationPath =  uploadPath.resolve(Objects.requireNonNull(file.getOriginalFilename())).normalize();
 
         // Copy the original file (Multipart) on to destination upload path
         Files.copy(file.getInputStream(), destinationPath, StandardCopyOption.REPLACE_EXISTING);
 
         // Save the file name in db
-        officer.setIdPath(fileName);
+        officer.setIdPath(file.getOriginalFilename());
 
         officerRepository.save(officer);
     }

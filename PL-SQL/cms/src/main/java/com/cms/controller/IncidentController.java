@@ -35,13 +35,13 @@ public class IncidentController {
 //    public List<Incident> getAll(){
 //        return incidentService.getAll();
 //}
-@GetMapping("/all")
+   @GetMapping("/all")
 public List<Incident> getAll( ){
     return incidentService.getAll( );
 }
 
 //    @GetMapping("/api/incident/all/v2")
-@GetMapping("/all/v2")
+   @GetMapping("/all/v2")
     public IncidentRespDto getAllV2(@RequestParam int page,
                                     @RequestParam int size){
         return incidentService.getAllWithPagination( page,size);
@@ -123,11 +123,11 @@ public List<Incident> getAll( ){
 //    }
 
 //    @PutMapping("/api/incident/update/{id}")
-    @PutMapping("/update/{id}")
-    public void update(@PathVariable int id,
-                       @RequestBody Incident updatedIncident){
-        incidentService.update(id, updatedIncident);
-    }
+//    @PutMapping("/update/{id}")
+//    public void update(@PathVariable int id,
+//                       @RequestBody Incident updatedIncident){
+//        incidentService.update(id, updatedIncident);
+//    }
 //    @GetMapping("/api/incident/type")
     @GetMapping("/type")
     public List<Incident> getByIncidentType(@RequestParam IncidentType incidentType){

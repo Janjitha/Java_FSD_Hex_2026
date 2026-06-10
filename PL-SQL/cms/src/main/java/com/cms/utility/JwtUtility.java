@@ -2,17 +2,15 @@ package com.cms.utility;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,9 +22,15 @@ import io.jsonwebtoken.security.Keys;
 @NoArgsConstructor
 public class JwtUtility { //Create(Encryption) and Validate (Decryption)
 
-    private String SECRET_KEY="hsdjfghsdjfh348534857348jsdhjsdhfjsdgh8478457hdgjfh478";
-    SecretKey secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET_KEY));
+    @Value("${jwt.secret}")
+    private String key;
 
+    SecretKey secretKey;
+
+    @PostConstruct // This delays the initialization of SecretKey until Spring reads properties file
+    public void init(){
+        secretKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(key));
+    }
     /*
      * This class does following things
      * 1. It creates the token for us.
@@ -47,7 +51,7 @@ public class JwtUtility { //Create(Encryption) and Validate (Decryption)
                 .claims(claims)
                 .subject(username) // this is your username
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1 * 60 * 60 * 24 * 1000))
+                .expiration(new Date(System.currentTimeMillis() + 2 * 60 * 60 * 24 * 1000))
                 .signWith(secretKey,Jwts.SIG.HS256 )
                 .compact();
     }

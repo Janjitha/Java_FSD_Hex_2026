@@ -17,7 +17,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@Configuration
 @AllArgsConstructor
 @Component
 public class JwtFilter extends OncePerRequestFilter {
@@ -26,19 +25,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        /// intercept the token , validate it or else throw an exception
-
+        // intercept the token , validate it or else throw an exception
         final String authorizationHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
         try {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-                // Extract the username and token
-                jwt = authorizationHeader.substring(7); //this is the token
-                username = jwtUtility.extractUsername(jwt); // this is the username
+                // extract the token and username
+                jwt = authorizationHeader.substring(7);
+                username = jwtUtility.extractUsername(jwt);
             }
-            // Validate
-            // Ensure user is not loggedIn
+            // user should not be already logged in
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
                 UserDetails userDetails = userService.loadUserByUsername(username);
@@ -51,19 +48,11 @@ public class JwtFilter extends OncePerRequestFilter {
                             .setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 }
-
             }
             filterChain.doFilter(request,response);
-
         }
         catch(Exception e){
             throw new RuntimeException("Token not found..");
         }
-
-
-
-        // The user is not already loggedIn
-
-
     }
 }

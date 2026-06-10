@@ -11,6 +11,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,23 +49,19 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) /// Spring needs this for POST,PUT & DELETE
-                //.csrf(ref->ref.disable())
                 .authorizeHttpRequests(authorize -> authorize
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/auth/login").authenticated()
+                                .requestMatchers(HttpMethod.GET, "api/auth/user-details").authenticated()
                                 .requestMatchers(HttpMethod.POST, "/api/officer/add").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/station/by-incident/{incidentId}").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/incident/suspect/by-incident/{incidentId}").authenticated()
-//                                .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasRole("OFFICER")
-//                                .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyRole("OFFICER", "STATION_HEAD")
-//                                .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasRole("OFFICER")
-//                                .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasRole("STATION_HEAD")
                                 .requestMatchers(HttpMethod.GET, "/api/incident/all/v2").hasAuthority("OFFICER")
                                 .requestMatchers(HttpMethod.GET, "/api/incident/get-one/{id}").hasAnyAuthority("OFFICER", "STATION_HEAD")
                                 .requestMatchers(HttpMethod.POST, "/api/incident/add/v2/{officerId}").hasAuthority("OFFICER")
                                 .requestMatchers(HttpMethod.GET, "/api/incident/get/officer/{officerId}").hasAuthority("STATION_HEAD")
                                 .requestMatchers(HttpMethod.GET, "/api/officer/by-incident/stat").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/incident/stat/by-type").permitAll()
-
                                 .requestMatchers(HttpMethod.POST, "/api/officer/id/upload").hasAuthority("OFFICER")
                                 .anyRequest().authenticated()
 
@@ -75,11 +72,9 @@ public class SecurityConfig {
         http.httpBasic(Customizer.withDefaults()); //i am telling Spring that i am using Basic Auth technique
         return http.build();
     }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
-        DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setUserDetailsService(userService);
+        DaoAuthenticationProvider dao = new DaoAuthenticationProvider(userService);
         dao.setPasswordEncoder(passwordEncoder());
         return dao;
     }
@@ -88,4 +83,5 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
 }

@@ -6,6 +6,7 @@ import com.cms.model.User;
 import com.cms.service.UserService;
 import com.cms.utility.JwtUtility;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import java.security.Principal;
 @RestController
 @RequestMapping("/api/auth")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final UserService userService;
@@ -26,27 +28,27 @@ public class AuthController {
     19.. then Spring already has checked username/password and they are right
     and i can ask for username from spring
     * */
-    @GetMapping("/login")
 //    public LoginResponseDto login(Principal principal){
 //        String loggedInUsername = principal.getName();
 //        User user =  (User)userService.loadUserByUsername(loggedInUsername);
 //        return new LoginResponseDto(user.getId(),
 //                user.getUsername(),
 //                user.getRole().toString());
-        public TokenDto login(Principal principal){
-            String username = principal.getName();
-            String token = jwtUtility.generateToken(username);
-            return new TokenDto(username,token);
-        }
+    @GetMapping("/login")
+    public TokenDto login(Principal principal){
+        String username = principal.getName();
+        String token = jwtUtility.generateToken(username);
+        return new TokenDto(username,token);
+    }
 
-        // this is for later
-        @GetMapping("/user-details")
-        public LoginResponseDto getUserDetails(Principal principal){
-            User user = (User)userService.loadUserByUsername(principal.getName());
-            return new LoginResponseDto(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getRole().toString()
-            );
+    // this is for later
+    @GetMapping("/user-details")
+    public LoginResponseDto getUserDetails(Principal principal){
+        User user = (User)userService.loadUserByUsername(principal.getName());
+        return new LoginResponseDto(
+                user.getId(),
+                user.getUsername(),
+                user.getRole().toString()
+        );
     }
 }

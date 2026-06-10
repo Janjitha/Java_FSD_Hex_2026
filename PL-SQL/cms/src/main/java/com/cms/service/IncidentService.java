@@ -55,14 +55,14 @@ public class IncidentService {
         incidentRepository.deleteById(id);
     }
 
-    public void update(int id, Incident updatedIncident) {
-        Incident exisitngIncident = getById(id);
-        // set the new values given to existing incident
-        exisitngIncident.setIncidentStatus(updatedIncident.getIncidentStatus());
-        exisitngIncident.setIncidentType(updatedIncident.getIncidentType());
-        exisitngIncident.setProgressDetails(updatedIncident.getProgressDetails());
-        incidentRepository.save(exisitngIncident);
-    }
+//    public void update(int id, Incident updatedIncident) {
+//        Incident exisitngIncident = getById(id);
+//        // set the new values given to existing incident
+//        exisitngIncident.setIncidentStatus(updatedIncident.getIncidentStatus());
+//        exisitngIncident.setIncidentType(updatedIncident.getIncidentType());
+//        exisitngIncident.setProgressDetails(updatedIncident.getProgressDetails());
+//        incidentRepository.save(exisitngIncident);
+//    }
 
     public IncidentRespDto getAllWithPagination(int page, int size) {
         // prepare the Pageable object using PageRequest.
